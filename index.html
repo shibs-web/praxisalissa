@@ -299,7 +299,7 @@
   </div>
 </section>
 
-<!-- BOOKING -->
+<!-- BOOKING
 <section id="termin">
   <div class="booking-inner">
     <div class="booking-text">
@@ -382,6 +382,161 @@
     </div>
   </div>
 </section>
+ -->
+
+
+
+ <!-- EmailJS Library -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  emailjs.init("mkJB2ftYCyq27avrE");
+</script>
+
+<!-- BOOKING -->
+<section id="termin">
+  <div class="booking-inner">
+    <div class="booking-text">
+      <div class="section-label">Kontakt & Buchung</div>
+      <h2>Termin bei <em>Praxis Al-Issa</em></h2>
+      <p>Kontaktiere mich direkt oder schreib mir per E-Mail. Ich melde mich schnellstmöglich bei dir.</p>
+      <div class="contact-items">
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <a href="tel:+49155771719842">+49 155 771 719 842</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <a href="mailto:praxisalissa@gmail.com">praxisalissa@gmail.com</a>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">👤</div>
+          Ahmd Al Mohammad
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🏅</div>
+          Zertifizierter Wellnesstherapeut
+        </div>
+      </div>
+    </div>
+
+    <div class="booking-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Vorname</label>
+          <input type="text" id="firstName" placeholder="Maria">
+        </div>
+        <div class="form-group">
+          <label>Nachname</label>
+          <input type="text" id="lastName" placeholder="Müller">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>E-Mail</label>
+        <input type="email" id="email" placeholder="maria@beispiel.de">
+      </div>
+      <div class="form-group">
+        <label>Telefon</label>
+        <input type="tel" id="phone" placeholder="+49 ...">
+      </div>
+      <div class="form-group">
+        <label>Behandlung</label>
+        <select id="treatment">
+          <option value="">Bitte wählen …</option>
+          <option>Klassische Massage (60 Min)</option>
+          <option>Fußreflexzonen-Therapie (45 Min)</option>
+          <option>Aromaölmassage (60 Min)</option>
+          <option>Sportmassage (60 Min)</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Wunschtermin</label>
+          <input type="date" id="date">
+        </div>
+        <div class="form-group">
+          <label>Uhrzeit</label>
+          <select id="time">
+            <option>09:00 Uhr</option>
+            <option>10:00 Uhr</option>
+            <option>11:00 Uhr</option>
+            <option>13:00 Uhr</option>
+            <option>14:00 Uhr</option>
+            <option>15:00 Uhr</option>
+            <option>16:00 Uhr</option>
+            <option>17:00 Uhr</option>
+            <option>18:00 Uhr</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Anmerkungen (optional)</label>
+        <textarea id="message" placeholder="Gibt es etwas, das ich wissen sollte?"></textarea>
+      </div>
+
+      <!-- Status Message -->
+      <div id="form-status" style="display:none; padding: 12px; border-radius: 8px; margin-bottom: 12px; text-align: center;"></div>
+
+      <button class="btn-submit" id="submitBtn" onclick="sendEmail()">Termin anfragen →</button>
+    </div>
+  </div>
+</section>
+
+<script>
+function sendEmail() {
+  const btn = document.getElementById('submitBtn');
+  const status = document.getElementById('form-status');
+
+  const firstName = document.getElementById('firstName').value.trim();
+  const lastName  = document.getElementById('lastName').value.trim();
+  const email     = document.getElementById('email').value.trim();
+  const phone     = document.getElementById('phone').value.trim();
+  const treatment = document.getElementById('treatment').value;
+  const date      = document.getElementById('date').value;
+  const time      = document.getElementById('time').value;
+  const message   = document.getElementById('message').value.trim();
+
+  // Basic validation
+  if (!firstName || !lastName || !email || !treatment || !date) {
+    status.style.display = 'block';
+    status.style.background = '#fee2e2';
+    status.style.color = '#991b1b';
+    status.textContent = '⚠️ Bitte fülle alle Pflichtfelder aus.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Wird gesendet…';
+
+  const templateParams = {
+    from_name : `${firstName} ${lastName}`,
+    from_email: email,
+    phone     : phone || '—',
+    treatment : treatment,
+    date      : date,
+    time      : time,
+    message   : message || '—',
+  };
+
+  emailjs.send("service_a2m5tco", "template_qqwbfm4", templateParams)
+    .then(() => {
+      status.style.display = 'block';
+      status.style.background = '#dcfce7';
+      status.style.color = '#166534';
+      status.textContent = '✅ Vielen Dank! Wir melden uns bald bei Ihnen.';
+      btn.textContent = 'Gesendet ✓';
+    })
+    .catch((err) => {
+      console.error(err);
+      status.style.display = 'block';
+      status.style.background = '#fee2e2';
+      status.style.color = '#991b1b';
+      status.textContent = '❌ Fehler beim Senden. Bitte versuche es erneut.';
+      btn.disabled = false;
+      btn.textContent = 'Termin anfragen →';
+    });
+}
+</script>
+
 
 
 <!-- CALENDLY BOOKING -->
